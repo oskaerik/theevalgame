@@ -1,11 +1,21 @@
 repos:
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.6
+  - repo: local
     hooks:
-      - id: ruff
-        args: [ --fix ]
+      - id: ruff-check
+        name: ruff-check
+        entry: pipenv run ruff check --fix
+        language: system
+        types: [python]
+        require_serial: true
       - id: ruff-format
-  - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.336
-    hooks:
+        name: ruff-format
+        entry: pipenv run ruff format
+        language: system
+        types: [python]
+        require_serial: true
       - id: pyright
+        name: pyright
+        entry: pipenv run pyright
+        language: system
+        types: [python]
+        require_serial: true
