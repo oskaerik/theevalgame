@@ -59,6 +59,7 @@ def main(page: ft.Page) -> None:
 
         if banned := get_banned_chars(code):
             update_text(f"{next(iter(banned))} is banned, sorry")
+            return
 
         try:
             symbols = get_symbols(f"{session_id} = {code}")
@@ -80,13 +81,13 @@ Your expression evaluates to: {symbols[session_id]}
         except Exception as e:  # noqa: BLE001
             update_text(repr(e))
 
-    page.title = "The PyGolf Game"
+    page.title = "pyquest"
     page.scroll = "adaptive"  # type: ignore
 
-    code_field = ft.TextField(label="Python goes here", on_change=on_code_change)
+    code_field = ft.TextField(label="Write your Python here", on_change=on_code_change)
     text_field = ft.Text()
 
-    page.add(code_field, text_field)
+    page.add(ft.Text("pyquest"), code_field, text_field)
     on_code_change()
 
 
