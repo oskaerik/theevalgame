@@ -21,8 +21,8 @@ def evaluate_objectives(symbols: dict, objectives: dict) -> dict:
     }
 
 
-def get_ast(code: str) -> Json:
-    """Get the AST of the first  expression."""
+def get_ast(code: str) -> dict:
+    """Get the AST of the first expression."""
     return ast_to_json(ast.parse(code))["body"][0]  # type: ignore
 
 
@@ -30,6 +30,8 @@ def ast_to_json(node: ast.AST | Json) -> Json:
     """Get the AST as a JSON."""
     if isinstance(node, ast.AST):
         fields = {k: ast_to_json(getattr(node, k)) for k in node._fields}
+        fields.pop("kind", None)
+        fields.pop("ctx", None)
         return {"type": type(node).__name__, **fields}
     if isinstance(node, list):
         return [ast_to_json(child) for child in node]

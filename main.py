@@ -27,7 +27,7 @@ def rule_print(ast: Json, _symbols: dict) -> bool:
         {
             "type": "Call",
             "func": {"id": "print"},
-            "args": [{"type": "Constant", "value": "here2!", "kind": None}],
+            "args": [{"type": "Constant", "value": "here2!"}],
         },
     )
 
