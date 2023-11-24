@@ -7,7 +7,7 @@ Json = dict | list | Basic | None
 
 def get_symbols(code: str, symbols: dict | None = None) -> dict:
     """Run code and get the symbols."""
-    symbols = symbols or {}
+    symbols = symbols.copy() if symbols else {}
     exec(code, symbols)  # noqa: S102
     del symbols["__builtins__"]
     return symbols

@@ -1,34 +1,39 @@
 """Tests."""
+import pytest
+
 from src import evaluate_objectives, get_symbols
 
 
-def test_run_without_initial_symbols_returns_symbols() -> None:
-    # Arrange
-    code = """
+@pytest.mark.parametrize(
+    ("code", "initial_symbols", "expected_symbols"),
+    [
+        (
+            """
 a = 7
 b = 3
 s = a + b
-"""
-
-    # Act
-    symbols = get_symbols(code)
-
-    # Assert
-    assert symbols == {"a": 7, "b": 3, "s": 10}
-
-
-def test_run_with_initial_symbols_returns_symbols() -> None:
-    # Arrange
-    code = """
+""",
+            None,
+            {"a": 7, "b": 3, "s": 10},
+        ),
+        (
+            """
 b = 3
 s = a + b
-"""
-
+     """,
+            {"a": 7},
+            {"a": 7, "b": 3, "s": 10},
+        ),
+    ],
+)
+def test_get_symbols_returns_symbols(
+    code: str, initial_symbols: dict | None, expected_symbols: dict
+) -> None:
     # Act
-    symbols = get_symbols(code, symbols={"a": 7})
+    symbols = get_symbols(code, symbols=initial_symbols)
 
     # Assert
-    assert symbols == {"a": 7, "b": 3, "s": 10}
+    assert symbols == expected_symbols
 
 
 def test_evaluate_objectives_returns_result() -> None:
