@@ -1,5 +1,5 @@
 """Tests."""
-from src import evaluate_objectives, run
+from src import evaluate_objectives, get_symbols
 
 
 def test_run_without_initial_symbols_returns_symbols() -> None:
@@ -11,7 +11,7 @@ s = a + b
 """
 
     # Act
-    symbols = run(code)
+    symbols = get_symbols(code)
 
     # Assert
     assert symbols == {"a": 7, "b": 3, "s": 10}
@@ -25,7 +25,7 @@ s = a + b
 """
 
     # Act
-    symbols = run(code, symbols={"a": 7})
+    symbols = get_symbols(code, symbols={"a": 7})
 
     # Assert
     assert symbols == {"a": 7, "b": 3, "s": 10}

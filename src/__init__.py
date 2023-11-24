@@ -23,7 +23,7 @@ def evaluate_objectives(symbols: dict, objectives: dict) -> dict:
 
 def get_ast(code: str) -> Json:
     """Get the AST of the first  expression."""
-    return ast_to_json(ast.parse(code))["body"][0]
+    return ast_to_json(ast.parse(code))["body"][0]  # type: ignore
 
 
 def ast_to_json(node: ast.AST | Json) -> Json:
