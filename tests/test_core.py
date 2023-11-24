@@ -1,51 +1,24 @@
 """Tests."""
+from typing import Any
+
 import pytest
 
-from src import Json, evaluate_objectives, get_ast, get_symbols, is_subtree
+from src.core import Json, evaluate_code, get_ast, is_subtree
 
 
 @pytest.mark.parametrize(
-    ("code", "initial_symbols", "expected_symbols"),
-    [
-        (
-            """
-a = 7
-b = 3
-s = a + b
-""",
-            None,
-            {"a": 7, "b": 3, "s": 10},
-        ),
-        (
-            """
-b = 3
-s = a + b
-     """,
-            {"a": 7},
-            {"a": 7, "b": 3, "s": 10},
-        ),
-    ],
+    ("code", "expected_result", "expected_symbols"),
+    [("1", 1, {}), ("(a := 1)", 1, {"a": 1})],
 )
-def test_get_symbols_returns_symbols(
-    code: str, initial_symbols: dict | None, expected_symbols: dict
+def test_evaluate_code_returns_result_and_symbols(
+    code: str, expected_result: Any, expected_symbols: dict
 ) -> None:
     # Act
-    symbols = get_symbols(code, symbols=initial_symbols)
+    result, symbols = evaluate_code(code)
 
     # Assert
+    assert result == expected_result
     assert symbols == expected_symbols
-
-
-def test_evaluate_objectives_returns_result() -> None:
-    # Arrange
-    symbols = {"a": 7, "b": 3}
-    objectives = {"a": 7, "b": 3, "s": 10}
-
-    # Act
-    result = evaluate_objectives(symbols, objectives)
-
-    # Assert
-    assert result == {"a": True, "b": True, "s": False}
 
 
 @pytest.mark.parametrize(
