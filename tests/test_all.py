@@ -90,6 +90,13 @@ def test_get_ast_returns_ast_dict(code: str, expected_ast: dict) -> None:
     ("tree", "expected", "expected_result"),
     [
         ({"a": 1}, {"a": 1}, True),
+        ({"a": 1}, {"b": 1}, False),
+        ({"a": 1}, 1, True),
+        ({"a": {"b": 1}}, {"a": {"b": 1}}, True),
+        ({"a": {"b": 1}}, {"a": {"b": 1}, "c": 2}, False),
+        ({"a": {"b": 1, "c": 2}}, {"a": {"b": 1}}, True),
+        ({"a": {"b": 1, "c": [2]}}, {"c": [2]}, True),
+        ([1, 2], 2, True),
     ],
 )
 def test_is_subtree_returns_result(
