@@ -4,8 +4,7 @@ from typing import Any
 
 import flet as ft
 
-from src.core import evaluate_code, get_ast
-from src.rules import evaluate_rules
+from src.rules import RuleEvaluator
 
 title = "the eval game"
 
@@ -21,19 +20,18 @@ def main(page: ft.Page) -> None:
         code = (event.control.value.strip() if event else "") or "None"
 
         try:
-            status = ""
-            for i, (rule_text, rule_ok) in enumerate(evaluate_rules(code)):
-                status += f"{rule_ok} Rule {i}: {rule_text}\n"
-            result, symbols = evaluate_code(code)
-            ast = get_ast(code)
+            re = RuleEvaluator(code)
+            rules = "\n".join(
+                f"{rule.ok} Rule {i}: {rule.text}" for i, rule in enumerate(re.rules)
+            )
             update_text(
-                f"""{status}
+                f"""{rules}
 
-Your expression evaluates to: {result}
+Your expression evaluates to: {re.result}
 
-{symbols}
+{re.symbols}
 
-{json.dumps(ast, indent=2)}"""
+{json.dumps(re.ast, indent=2)}"""
             )
         except Exception as e:  # noqa: BLE001
             update_text(repr(e))
@@ -41,7 +39,7 @@ Your expression evaluates to: {result}
     page.title = title
     page.scroll = "adaptive"  # type: ignore
 
-    code_field = ft.TextField(label="Write your Python here", on_change=on_code_change)
+    code_field = ft.TextField(label="python", on_change=on_code_change)
     text_field = ft.Text()
 
     page.add(ft.Text(title), code_field, text_field)
