@@ -24,29 +24,23 @@ def test_evaluate_code_returns_result_and_symbols(
 @pytest.mark.parametrize(
     ("code", "expected_ast"),
     [
-        ("1", {"type": "Expr", "value": {"type": "Constant", "value": 1}}),
+        ("1", {"type": "Constant", "value": 1}),
         (
             "1+1",
             {
-                "type": "Expr",
-                "value": {
-                    "type": "BinOp",
-                    "left": {"type": "Constant", "value": 1},
-                    "op": {"type": "Add"},
-                    "right": {"type": "Constant", "value": 1},
-                },
+                "type": "BinOp",
+                "left": {"type": "Constant", "value": 1},
+                "op": {"type": "Add"},
+                "right": {"type": "Constant", "value": 1},
             },
         ),
         (
             "print('a')",
             {
-                "type": "Expr",
-                "value": {
-                    "type": "Call",
-                    "func": {"type": "Name", "id": "print"},
-                    "args": [{"type": "Constant", "value": "a"}],
-                    "keywords": [],
-                },
+                "type": "Call",
+                "func": {"type": "Name", "id": "print"},
+                "args": [{"type": "Constant", "value": "a"}],
+                "keywords": [],
             },
         ),
     ],

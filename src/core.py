@@ -16,7 +16,7 @@ def evaluate_code(code: str, symbols: dict | None = None) -> tuple[Any, dict]:
 
 def get_ast(code: str) -> dict:
     """Get the AST of the first expression."""
-    return ast_to_json(ast.parse(code))["body"][0]  # type: ignore
+    return ast_to_json(ast.parse(code))["body"][0]["value"]  # type: ignore
 
 
 def ast_to_json(node: ast.AST | Json) -> Json:
