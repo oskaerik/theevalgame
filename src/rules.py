@@ -1,21 +1,23 @@
 """All things rules."""
-from typing import Any
 
 from src.core import evaluate_code, get_ast, is_subtree
 
 
-def rule_42(result: Any, _symbols: dict, _ast: dict) -> bool:
+def rule_42(code: str) -> bool:
     """Expression should evaluate to 42."""
+    result, _symbols = evaluate_code(code)
     return result == 42
 
 
-def rule_add(_result: Any, _symbols: dict, ast: dict) -> bool:
+def rule_add(code: str) -> bool:
     """Expression should contain addition."""
+    ast = get_ast(code)
     return is_subtree(ast, {"op": {"type": "Add"}})
 
 
-def rule_print(_result: Any, _symbols: dict, ast: dict) -> bool:
+def rule_print(code: str) -> bool:
     """Expression should call print("here2!")."""
+    ast = get_ast(code)
     return is_subtree(
         ast,
         {
@@ -38,6 +40,4 @@ rules = [
 
 def evaluate_rules(code: str) -> list:
     """Evaluate all rules."""
-    result, symbols = evaluate_code(code)
-    ast = get_ast(code)
-    return [(rule_text, rule(result, symbols, ast)) for rule_text, rule in rules]
+    return [(rule_text, rule(code)) for rule_text, rule in rules]
