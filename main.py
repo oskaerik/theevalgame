@@ -47,5 +47,4 @@ Your expression evaluates to: {re.result}
     on_code_change()
 
 
-if __name__ == "__main__":
-    ft.app(port=51111, target=main, view=ft.AppView.WEB_BROWSER)
+ft.app(port=51111, target=main, view=ft.AppView.WEB_BROWSER)
