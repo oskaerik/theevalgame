@@ -1,11 +1,10 @@
 """Code game."""
 import json
-from importlib import reload
 from typing import Any
 
 import flet as ft
 
-import src.rules
+from src.rules import RuleEvaluator
 
 title = "the eval game"
 
@@ -18,11 +17,10 @@ def main(page: ft.Page) -> None:
         page.update()
 
     def on_code_change(event: Any = None) -> None:
-        reload(src.rules)
         code = (event.control.value.strip() if event else "") or "None"
 
         try:
-            re = src.rules.RuleEvaluator(code)
+            re = RuleEvaluator(code)
             rules = "\n".join(
                 f"{rule.ok} Rule {i}: {rule.text}"
                 for i, rule in enumerate(re.rules, start=1)

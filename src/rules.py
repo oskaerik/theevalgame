@@ -1,7 +1,10 @@
 """All things rules."""
+from pathlib import Path
 from typing import NamedTuple, Self
 
 from src.core import evaluate_code, get_ast, is_subtree
+
+PASSWORD_FILE = Path("src/password.txt")
 
 
 class Rule(NamedTuple):
@@ -16,6 +19,10 @@ class RuleEvaluator:
 
     def __init__(self: Self, code: str) -> None:
         """Evaluate rules."""
+        # Create password file
+        with PASSWORD_FILE.open("w") as f:
+            f.write("abc123")
+
         self.code = code
         self.result, self.symbols = evaluate_code(self.code)
         self.ast = get_ast(self.code)
@@ -39,6 +46,10 @@ class RuleEvaluator:
             Rule(
                 "This is getting messy, maybe OOP will solve it, define a class C",
                 self.rule_class(),
+            ),
+            Rule(
+                "Oops, I committed my password, please delete it",
+                self.rule_delete(),
             ),
         ]
 
@@ -80,3 +91,7 @@ class RuleEvaluator:
             type(self.symbols["C"]).__name__ == "type"
             and self.symbols["C"].__name__ == "C"
         )
+
+    def rule_delete(self: Self) -> bool:
+        """Expression should delete file."""
+        return not PASSWORD_FILE.exists()
