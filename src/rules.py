@@ -4,7 +4,7 @@ from typing import NamedTuple, Self
 
 from src.core import evaluate_code, get_ast, is_subtree
 
-PASSWORD_FILE = Path("src/password.txt")
+PASSWORD_FILE = Path("password.txt")
 
 
 class Rule(NamedTuple):
@@ -20,8 +20,9 @@ class RuleEvaluator:
     def __init__(self: Self, code: str) -> None:
         """Evaluate rules."""
         # Create password file
-        with PASSWORD_FILE.open("w") as f:
-            f.write("abc123")
+        if not PASSWORD_FILE.exists():
+            with PASSWORD_FILE.open("w") as f:
+                f.write("abc123")
 
         self.code = code
         self.result, self.symbols = evaluate_code(self.code)

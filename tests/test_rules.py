@@ -1,13 +1,30 @@
 """Tests."""
+
 import pytest
 
 from src.rules import RuleEvaluator
 
 
 @pytest.mark.parametrize("code", ["1"])
-def test_evaluate_rules_smoke_test(code: str) -> None:
+def test_rule_evaluator_smoke_test(code: str) -> None:
     # Act
     RuleEvaluator(code)
+
+
+def test_rule_evaluator_creates_password_file() -> None:
+    # Arrange
+    from pathlib import Path
+
+    # Assuming this script is located inside the target directory
+    password_file = Path(__file__).parent.parent / "password.txt"
+    password_file.unlink(missing_ok=True)
+    assert not password_file.exists()
+
+    # Act
+    RuleEvaluator("1")
+
+    # Assert
+    assert password_file.exists()
 
 
 @pytest.mark.parametrize(

@@ -160,4 +160,4 @@ cython_debug/
 #.idea/
 
 *.swp
-src/password.txt
+password.txt
