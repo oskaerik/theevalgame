@@ -32,6 +32,14 @@ class RuleEvaluator:
                 "That won't cut it, define your own print function",
                 self.rule_def_print(),
             ),
+            Rule(
+                "Too many corner cases, your expression can't contain [",
+                self.rule_bracket(),
+            ),
+            Rule(
+                "This is getting messy, maybe OOP will solve it, define a class C",
+                self.rule_class(),
+            ),
         ]
 
     def rule_42(self: Self) -> bool:
@@ -59,3 +67,16 @@ class RuleEvaluator:
             return self.symbols["print"].__class__.__name__ == "function"
         except:  # noqa: E722
             return False
+
+    def rule_bracket(self: Self) -> bool:
+        """Expression should not contain [."""
+        return "[" not in self.code
+
+    def rule_class(self: Self) -> bool:
+        """Expression should define class C."""
+        if "C" not in self.symbols:
+            return False
+        return (
+            type(self.symbols["C"]).__name__ == "type"
+            and self.symbols["C"].__name__ == "C"
+        )
