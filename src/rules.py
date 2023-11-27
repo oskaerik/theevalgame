@@ -52,6 +52,10 @@ class RuleEvaluator:
                 "Oops, I committed my password, please delete it",
                 self.rule_delete(),
             ),
+            Rule(
+                "Uhh, your expression can't contain... numbers?",
+                self.rule_no_num(),
+            ),
         ]
 
     def rule_42(self: Self) -> bool:
@@ -96,3 +100,7 @@ class RuleEvaluator:
     def rule_delete(self: Self) -> bool:
         """Expression should delete file."""
         return not PASSWORD_FILE.exists()
+
+    def rule_no_num(self: Self) -> bool:
+        """Expression should not contain numbers."""
+        return not any(c.isdigit() for c in self.code)
