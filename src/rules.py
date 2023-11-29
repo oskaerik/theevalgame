@@ -19,10 +19,7 @@ class RuleEvaluator:
 
     def __init__(self: Self, code: str) -> None:
         """Evaluate rules."""
-        # Create password file
-        if not PASSWORD_FILE.exists():
-            with PASSWORD_FILE.open("w") as f:
-                f.write("abc123")
+        self.setup()
 
         self.code = code
         self.result, self.symbols = evaluate_code(self.code)
@@ -53,10 +50,20 @@ class RuleEvaluator:
                 self.rule_delete(),
             ),
             Rule(
-                "Uhh, your expression can't contain... numbers?",
+                "Your expression should not contain... numbers",
                 self.rule_no_num(),
             ),
+            Rule(
+                "Sorry, no __builtins__",
+                self.rule_builtins(),
+            ),
         ]
+
+    def setup(self: Self) -> None:
+        """Create password.txt file."""
+        if not PASSWORD_FILE.exists():
+            with PASSWORD_FILE.open("w") as f:
+                f.write("abc123")
 
     def rule_42(self: Self) -> bool:
         """Expression should evaluate to 42."""
@@ -104,3 +111,12 @@ class RuleEvaluator:
     def rule_no_num(self: Self) -> bool:
         """Expression should not contain numbers."""
         return not any(c.isdigit() for c in self.code)
+
+    def rule_builtins(self: Self) -> bool:
+        """Expression should not use __builtins__."""
+        self.setup()
+        try:
+            result, symbols = evaluate_code(self.code, symbols={"__builtins__": {}})
+        except:  # noqa: E722
+            return False
+        return result == self.result and symbols == self.symbols

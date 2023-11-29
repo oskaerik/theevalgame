@@ -17,13 +17,13 @@ def main(page: ft.Page) -> None:
 
     best_i = 0
 
-    def update_rule_list(rules: list[Rule]) -> None:
-        for i, rule in enumerate(rules):  # noqa: B007
+    def update_rule_list(rules: list[Rule]):
+        for i, rule in enumerate(rules):
             if not rule.ok:
                 break
 
         nonlocal best_i
-        best_i = max(best_i, i)  # type: ignore
+        best_i = max(best_i, i)
 
         rule_list.controls = [
             ft.Container(
