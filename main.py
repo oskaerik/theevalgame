@@ -7,13 +7,15 @@ import flet as ft
 from src.rules import Rule, RuleEvaluator
 
 title = "the eval game"
+width = 500
 debug = False
 
 
 def main(page: ft.Page) -> None:
     """Run flet."""
     page.title = title
-    page.scroll = "adaptive"  # type: ignore
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    page.scroll = ft.ScrollMode.ADAPTIVE
 
     best_i = 0
 
@@ -32,9 +34,11 @@ def main(page: ft.Page) -> None:
                     size=20,
                     color=ft.colors.WHITE,
                     weight=ft.FontWeight.BOLD,
+                    text_align=ft.TextAlign.CENTER,
                 ),
                 bgcolor=ft.colors.GREEN if rule.ok else ft.colors.RED,
                 padding=5,
+                width=width,
             )
             for i, rule in reversed(list(enumerate(rules[: best_i + 1])))
         ]
@@ -61,10 +65,15 @@ def main(page: ft.Page) -> None:
         except Exception as e:  # noqa: BLE001
             update_text(repr(e))
 
-    code_field = ft.TextField(label="python", on_change=on_code_change)
+    code_field = ft.TextField(
+        label="python", autocorrect=False, on_change=on_code_change
+    )
     text_field = ft.Text()
     rule_list = ft.Column(controls=[])
-    page.add(ft.Text(title), code_field, text_field, rule_list)
+    layout = ft.Column(
+        controls=[ft.Text(title), code_field, text_field, rule_list], width=width
+    )
+    page.add(layout)
     on_code_change()
 
 
