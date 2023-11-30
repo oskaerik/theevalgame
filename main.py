@@ -8,7 +8,7 @@ from src.rules import Rule, RuleEvaluator
 
 title = "the eval game"
 width = 500
-debug = True
+debug = False
 
 
 def main(page: ft.Page) -> None:
@@ -42,6 +42,22 @@ def main(page: ft.Page) -> None:
             )
             for i, rule in reversed(list(enumerate(rules[: best_i + 1])))
         ]
+
+        if all(rule.ok for rule in rules):
+            rule_list.controls = [
+                ft.Container(
+                    content=ft.Text(
+                        "Well done, you're a pro!",
+                        size=20,
+                        color=ft.colors.WHITE,
+                        weight=ft.FontWeight.BOLD,
+                        text_align=ft.TextAlign.CENTER,
+                    ),
+                    bgcolor=ft.colors.GREEN,
+                    padding=5,
+                    width=width,
+                )
+            ]
         page.update()
 
     def update_text(new_text: str) -> None:
