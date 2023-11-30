@@ -8,7 +8,9 @@ ignore = [
     "FA102",
     "PLR2004",
     "PGH003",
-    "ANN401"
+    "ANN401",
+    "FBT001",
+    "FBT002"
 ]
 
 [tool.ruff.per-file-ignores]

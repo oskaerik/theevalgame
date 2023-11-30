@@ -36,3 +36,19 @@ def test_rule_class(code: str, expected_ok: bool) -> None:
 
     # Assert
     assert ok == expected_ok
+
+
+@pytest.mark.parametrize(
+    ("code", "expected_ok"),
+    [
+        ("print()", True),
+        ("(print := 1,).__getitem__(0)", False),
+        ("print.__dir__()", False),
+    ],
+)
+def test_rule_print(code: str, expected_ok: bool) -> None:
+    # Act
+    ok = RuleEvaluator(code).rule_print()
+
+    # Assert
+    assert ok == expected_ok

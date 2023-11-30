@@ -31,17 +31,17 @@ def ast_to_json(node: ast.AST | Json) -> Json:
     return node
 
 
-def is_subtree(tree: Json, expected: Json) -> bool:
+def is_subtree(tree: Json, expected: Json, depth: bool = True) -> bool:
     """Check if expected is subtree of tree."""
     if tree == expected:
         return True
     if isinstance(tree, dict):
         if isinstance(expected, dict) and all(
-            key in tree and is_subtree(tree[key], value)
+            key in tree and is_subtree(tree[key], value, depth=False)
             for key, value in expected.items()
         ):
             return True
-        return any(is_subtree(s, expected) for s in tree.values())
+        return any(is_subtree(s, expected) for s in tree.values()) if depth else False
     if isinstance(tree, list):
-        return any(is_subtree(s, expected) for s in tree)
+        return any(is_subtree(s, expected) for s in tree) if depth else False
     return False

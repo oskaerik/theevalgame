@@ -8,7 +8,7 @@ from src.rules import Rule, RuleEvaluator
 
 title = "the eval game"
 width = 500
-debug = False
+debug = True
 
 
 def main(page: ft.Page) -> None:
