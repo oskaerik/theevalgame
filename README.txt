@@ -1,14 +1,16 @@
+email: oskaerik@gmail.com
+
 In this maze, where paths are wide,
 You've stumbled here, by some curious tide.
-In lines of code and logic's neat array,
-A README greets you, in an unusual way.
+In lines of code and in neat arrays,
+READMEs sometimes greet you in unusual ways.
 
 A file often skimmed, sometimes unseen,
 Holds a message here, in the machine's serene.
 It's not just text, nor mundane guide,
 But a poetic surprise, tucked deep inside.
 
-So pause a while, in your pursuit,
+So pause a while in your pursuit,
 As words blend with code, in an unlikely suit.
 In this realm of bytes, where secrets hide,
 Who thought a README could be your guide?
