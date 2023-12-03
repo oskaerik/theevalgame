@@ -14,20 +14,6 @@ class Rule(NamedTuple):
     ok: bool
 
 
-class SpyDict(dict):
-    """For spying on accessed keys of dict."""
-
-    def __init__(self: Self) -> None:
-        """Spy constructor."""
-        super().__init__()
-        self.accessed_keys = set()
-
-    def __getitem__(self: Self, key: Any) -> Any:
-        """Add key to accessed keys."""
-        self.accessed_keys.add(key)
-        return super().__getitem__(key)
-
-
 class RuleEvaluator:
     """A rule evaluator."""
 
@@ -41,12 +27,19 @@ class RuleEvaluator:
         # Spy on __builtins__
         builtins = (eval("None", s := {}), s["__builtins__"])[-1]  # noqa: S307, PGH001
         builtins.pop("_", None)
-        self.builtins_spy = SpyDict()
-        self.builtins_spy.update(builtins)
+        self.used_builtins = False
+
+        class BuiltinsProxy:
+            """For spying on builtins."""
+
+            def __getitem__(_: Self, key: Any) -> Any:  # noqa: N805
+                """Builtins were used."""
+                self.used_builtins = True  # self is RuleEvaluator
+                return builtins[key]
 
         self.code = code
         self.result, self.symbols = evaluate_code(
-            self.code, {"__builtins__": self.builtins_spy}
+            self.code, {"__builtins__": BuiltinsProxy()}
         )
         self.ast = get_ast(self.code)
 
@@ -136,4 +129,4 @@ class RuleEvaluator:
 
     def rule_builtins(self: Self) -> bool:
         """Expression should not use __builtins__."""
-        return not self.builtins_spy.accessed_keys
+        return not self.used_builtins
