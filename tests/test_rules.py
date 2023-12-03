@@ -52,3 +52,20 @@ def test_rule_print(code: str, expected_ok: bool) -> None:
 
     # Assert
     assert ok == expected_ok
+
+
+@pytest.mark.parametrize(
+    ("code", "expected_ok"),
+    [
+        ("__builtins__ and list((42,))[0]", False),
+        ("42", True),
+        ("True", True),
+        ("list", False),
+    ],
+)
+def test_rule_builtins(code: str, expected_ok: bool) -> None:
+    # Act
+    ok = RuleEvaluator(code).rule_builtins()
+
+    # Assert
+    assert ok == expected_ok

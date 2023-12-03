@@ -75,7 +75,9 @@ def main(page: ft.Page) -> None:
                 text_content.append(
                     "\n".join(f"{rule.ok} {rule.text}" for rule in re.rules)
                 )
-                text_content.append(str(re.symbols))
+                text_content.append(
+                    str({k: v for k, v in re.symbols.items() if k != "__builtins__"})
+                )
                 text_content.append(json.dumps(re.ast, indent=2))
             update_text("\n\n".join(text_content))
         except Exception as e:  # noqa: BLE001

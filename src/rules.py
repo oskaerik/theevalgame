@@ -1,6 +1,6 @@
 """All things rules."""
 from pathlib import Path
-from typing import NamedTuple, Self
+from typing import Any, NamedTuple, Self
 
 from src.core import evaluate_code, get_ast, is_subtree
 
@@ -14,15 +14,40 @@ class Rule(NamedTuple):
     ok: bool
 
 
+class SpyDict(dict):
+    """For spying on accessed keys of dict."""
+
+    def __init__(self: Self) -> None:
+        """Spy constructor."""
+        super().__init__()
+        self.accessed_keys = set()
+
+    def __getitem__(self: Self, key: Any) -> Any:
+        """Add key to accessed keys."""
+        self.accessed_keys.add(key)
+        return super().__getitem__(key)
+
+
 class RuleEvaluator:
     """A rule evaluator."""
 
     def __init__(self: Self, code: str) -> None:
         """Evaluate rules."""
-        self.setup()
+        # Create password.txt file
+        if not PASSWORD_FILE.exists():
+            with PASSWORD_FILE.open("w") as f:
+                f.write("abc123")
+
+        # Spy on __builtins__
+        builtins = (eval("None", s := {}), s["__builtins__"])[-1]  # noqa: S307, PGH001
+        builtins.pop("_", None)
+        self.builtins_spy = SpyDict()
+        self.builtins_spy.update(builtins)
 
         self.code = code
-        self.result, self.symbols = evaluate_code(self.code)
+        self.result, self.symbols = evaluate_code(
+            self.code, {"__builtins__": self.builtins_spy}
+        )
         self.ast = get_ast(self.code)
 
         self.rules = [
@@ -58,12 +83,6 @@ class RuleEvaluator:
                 self.rule_builtins(),
             ),
         ]
-
-    def setup(self: Self) -> None:
-        """Create password.txt file."""
-        if not PASSWORD_FILE.exists():
-            with PASSWORD_FILE.open("w") as f:
-                f.write("abc123")
 
     def rule_42(self: Self) -> bool:
         """Expression should evaluate to 42."""
@@ -114,9 +133,4 @@ class RuleEvaluator:
 
     def rule_builtins(self: Self) -> bool:
         """Expression should not use __builtins__."""
-        self.setup()
-        try:
-            result, symbols = evaluate_code(self.code, symbols={"__builtins__": {}})
-        except:  # noqa: E722
-            return False
-        return True
+        return not self.builtins_spy.accessed_keys

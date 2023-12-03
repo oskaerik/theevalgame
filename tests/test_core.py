@@ -15,6 +15,7 @@ def test_evaluate_code_returns_result_and_symbols(
 ) -> None:
     # Act
     result, symbols = evaluate_code(code)
+    symbols.pop("__builtins__", None)
 
     # Assert
     assert result == expected_result

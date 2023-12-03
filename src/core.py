@@ -8,9 +8,8 @@ Json = dict | list | Basic | None
 
 def evaluate_code(code: str, symbols: dict | None = None) -> tuple[Any, dict]:
     """Run code and get the result and symbols."""
-    symbols = symbols.copy() if symbols else {}
+    symbols = {} if symbols is None else symbols
     result = eval(code, symbols)  # noqa: S307,PGH001
-    symbols.pop("__builtins__", None)
     return result, symbols
 
 
