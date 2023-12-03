@@ -101,6 +101,9 @@ class RuleEvaluator:
         return is_subtree(
             self.ast,
             {"type": "Call", "func": {"id": "print"}},
+        ) or is_subtree(
+            self.ast,
+            {"type": "Call", "func": {"type": "NamedExpr", "target": {"id": "print"}}},
         )
 
     def rule_def_print(self: Self) -> bool:

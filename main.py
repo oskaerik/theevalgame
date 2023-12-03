@@ -1,5 +1,6 @@
 """Code game."""
 import json
+import os
 from typing import Any
 
 import flet as ft
@@ -8,7 +9,7 @@ from src.rules import Rule, RuleEvaluator
 
 title = "the eval game"
 width = 500
-debug = False
+debug = bool(os.environ.get("DEBUG"))
 
 
 def main(page: ft.Page) -> None:

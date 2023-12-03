@@ -44,6 +44,7 @@ def test_rule_class(code: str, expected_ok: bool) -> None:
         ("print()", True),
         ("(print := 1,).__getitem__(0)", False),
         ("print.__dir__()", False),
+        ("(print := lambda: None)()", True),
     ],
 )
 def test_rule_print(code: str, expected_ok: bool) -> None:
