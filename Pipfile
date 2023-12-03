@@ -8,7 +8,7 @@ flet = "*"
 
 [dev-packages]
 pre-commit = "*"
-ruff = "*"
+#ruff = "*"
 pyright = "*"
 pytest = "*"
 pytest-cov = "*"
