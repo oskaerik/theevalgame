@@ -5,7 +5,7 @@ from typing import Any
 
 import flet as ft
 
-from src.rules import Rule, RuleEvaluator
+from src.rules import RuleEvaluator
 
 title = "the eval game"
 width = 500
@@ -20,8 +20,8 @@ def main(page: ft.Page) -> None:
 
     best_i = 0
 
-    def update_rule_list(rules: list[Rule]) -> None:
-        for i, rule in enumerate(rules):  # noqa: B007
+    def update_rule_list(re: RuleEvaluator) -> None:
+        for i, rule in enumerate(re.rules):  # noqa: B007
             if not rule.ok:
                 break
 
@@ -41,14 +41,17 @@ def main(page: ft.Page) -> None:
                 padding=5,
                 width=width,
             )
-            for i, rule in reversed(list(enumerate(rules[: best_i + 1])))
+            for i, rule in reversed(list(enumerate(re.rules[: best_i + 1])))
         ]
 
-        if all(rule.ok for rule in rules):
+        if all(rule.ok for rule in re.rules):
             rule_list.controls = [
                 ft.Container(
                     content=ft.Text(
-                        "Well done, you're a pro!",
+                        (
+                            f"Your solution is {len(re.code)} characters,"
+                            " add it to the leaderboard!"
+                        ),
                         size=20,
                         color=ft.colors.WHITE,
                         weight=ft.FontWeight.BOLD,
@@ -70,7 +73,7 @@ def main(page: ft.Page) -> None:
 
         try:
             re = RuleEvaluator(code)
-            update_rule_list(re.rules)
+            update_rule_list(re)
             text_content = [f"Your expression evaluates to: {re.result}"]
             if debug:
                 text_content.append(
@@ -89,8 +92,13 @@ def main(page: ft.Page) -> None:
     )
     text_field = ft.Text()
     rule_list = ft.Column(controls=[])
+    leaderboard = ft.Markdown(
+        "[leaderboard](https://docs.google.com/spreadsheets/d/1ple0iI5pmSDbpPTNZEv6Hbyq5zgAgfp3FLxPJm5ajVc/edit?usp=drivesdk)",
+        on_tap_link=lambda e: page.launch_url(e.data),
+    )
     layout = ft.Column(
-        controls=[ft.Text(title), code_field, text_field, rule_list], width=width
+        controls=[ft.Text(title), leaderboard, code_field, text_field, rule_list],
+        width=width,
     )
     page.add(layout)
     on_code_change()
