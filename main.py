@@ -31,7 +31,7 @@ def main(page: ft.Page) -> None:
         rule_list.controls = [
             ft.Container(
                 content=ft.Text(
-                    f"Rule {i+1}: {rule.text}",
+                    f"{'✔' if rule.ok else '✖'} Rule {i+1}: {rule.text}",
                     size=20,
                     color=ft.colors.WHITE,
                     weight=ft.FontWeight.BOLD,

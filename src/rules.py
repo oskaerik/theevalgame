@@ -90,7 +90,7 @@ class RuleEvaluator:
         return is_subtree(self.ast, {"type": "comprehension"})
 
     def rule_print(self: Self) -> bool:
-        """Expression should calls print."""
+        """Expression should call print."""
         return is_subtree(
             self.ast,
             {"type": "Call", "func": {"id": "print"}},
