@@ -52,7 +52,7 @@ class RuleEvaluator:
                 self.rule_print(),
             ),
             Rule(
-                "That won't cut it, define your own print function",
+                "That won't cut it, define your own print function in globals",
                 self.rule_def_print(),
             ),
             Rule(
@@ -60,11 +60,12 @@ class RuleEvaluator:
                 self.rule_bracket(),
             ),
             Rule(
-                "This is getting messy, maybe OOP will solve it, define a class C",
+                "This is getting messy, "
+                "maybe OOP will solve it, define a class C in globals",
                 self.rule_class(),
             ),
             Rule(
-                "Oops, I committed my password, please delete it",
+                "Oops, I committed my password, please delete it from the filesystem",
                 self.rule_delete(),
             ),
             Rule(
@@ -72,7 +73,7 @@ class RuleEvaluator:
                 self.rule_no_num(),
             ),
             Rule(
-                "Sorry, no __builtins__",
+                "Sorry, no builtins",
                 self.rule_builtins(),
             ),
         ]
